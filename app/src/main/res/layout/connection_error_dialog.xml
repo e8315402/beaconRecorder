@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/tmp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/connectionErrorDg_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="@dimen/size_s"
+            android:text="_title"
+            android:textSize="@dimen/sp_l" />
+    </RelativeLayout>
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tmp"
+        android:layout_marginLeft="@dimen/size_s"
+        android:layout_marginRight="@dimen/size_s"
+        android:background="@color/gray_transparent"></View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_xl"
+        android:id="@+id/ctLayout"
+        android:layout_below="@+id/divide_line"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="_content"
+            android:textSize="@dimen/sp_l"
+            android:gravity="center"
+            android:id="@+id/connectionErrorDg_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ensLayout"
+        android:layout_below="@+id/ctLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size_t"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/cancel_tx"
+            android:textColor="@color/gray"
+            android:visibility="gone"
+            android:textSize="@dimen/sp_l" />
+
+        <Button
+            android:id="@+id/ensBtn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="@string/confirm_tx"
+            android:textColor="@color/green_700"
+            android:textSize="@dimen/sp_l" />
+    </LinearLayout>
+
+</RelativeLayout>

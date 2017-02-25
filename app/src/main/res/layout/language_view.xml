@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:id="@+id/root"
+    android:gravity="center"
+    android:padding="@dimen/size_s"
+    android:layout_margin="@dimen/size_s"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_view">
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/play_eq"
+            android:src="@mipmap/play_eq1"
+            android:contentDescription="Animation"
+            android:visibility="invisible"
+            android:layout_weight="9" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="_language"
+            android:textSize="@dimen/sp_m"
+            android:id="@+id/languageTx"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hapticFeedbackEnabled="false"
+            android:gravity="center" />
+</LinearLayout>

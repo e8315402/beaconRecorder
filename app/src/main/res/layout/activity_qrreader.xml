@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_transparent">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/app_bar_green" />
+
+    <LinearLayout
+        android:id="@+id/ctLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tool_bar"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+    </LinearLayout>
+
+</RelativeLayout>
