@@ -21,7 +21,6 @@
 
     <string name="confirm_tx">確定</string>
     <string name="finish_tx">完成</string>
-    <string name="cancel_tx">取消</string>
     <string name="parse_failed_title">資料異常</string>
     <string name="parse_failed">解析資料發生異常，請更新應用程式</string>
     <string name="not_oneplay_qr_content">請讀取 Micro App</string>

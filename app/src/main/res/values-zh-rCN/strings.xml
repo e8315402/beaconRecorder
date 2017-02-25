@@ -20,7 +20,6 @@
 
     <string name="confirm_tx">确定</string>
     <string name="finish_tx">完成</string>
-    <string name="cancel_tx">取消</string>
     <string name="parse_failed_title">资料异常</string>
     <string name="parse_failed">解析资料发生异常，请更新应用程式</string>
     <string name="not_oneplay_qr_content">请读取 Micro App</string>

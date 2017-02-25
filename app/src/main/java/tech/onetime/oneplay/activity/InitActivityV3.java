@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
@@ -27,26 +27,34 @@ import tech.onetime.oneplay.ble.BeaconScanCallback;
 @EActivity(R.layout.activity_init_activity_v3)
 public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallback.iBeaconScanCallback {
 
+
     public final String TAG = "InitActivityV3";
 
     private BeaconScanCallback _beaconCallback;
 
-    private short _scanTime = 90;
-//    private short _distance = 1;
+    private int _scanTime = 0;
+    private int _currentDistance = 1;
+    private String _currentTxPower = "";
 
-    private boolean _chooseDistance = false;
-    private int _currentTxPowerIndex = 0;
+    static final int PICK_DISTANCE_REQUEST = 1;  // The request code
+    static final int PICK_TXPOWER_REQUEST = 2;
+    static final int REQUEST_ENABLE_BT = 1001;
 
     @ViewById(R.id.startScan)
     Button btn_Scan;
-    @ViewById(R.id.reScan)
-    Button btn_reScan;
+    @ViewById(R.id.stopScan)
+    Button btn_stopScan;
+    @ViewById(R.id.cleanUp)
+    Button btn_cleanUp;
+    @ViewById(R.id.setting)
+    Button btn_setting;
     @ViewById(R.id.chooseDistance)
     Button btn_chooseDistance;
-    @ViewById(R.id.chooseTxPower_ok)
-    Button btn_chooseDistance_ok;
+    @ViewById(R.id.chooseTxPower)
+    Button btn_chooseTxPower;
     @ViewById(R.id.storeResult)
     Button btn_storeResult;
+
     @ViewById(R.id.rssi)
     TextView textView_rssi;
     @ViewById(R.id.times)
@@ -57,91 +65,110 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     @Click(R.id.startScan)
     void startScan() {
 
-        Log.d(TAG,"startScan");
-
-        btn_chooseDistance.setVisibility(View.GONE);
+        Log.d(TAG, "Start scan");
 
         if (bleInit()) {
+            btn_Scan.setVisibility(View.GONE);
+            btn_setting.setVisibility(View.GONE);
+            btn_cleanUp.setVisibility(View.GONE);
+
+            btn_stopScan.setVisibility(View.VISIBLE);
 //            excelBuilder.createNewSheet(_txPower);
         }
 
     }
 
-    @Click(R.id.reScan)
-    void reScan() {
+    @Click(R.id.stopScan)
+    void stopScan() {
 
-        Log.d(TAG, "reScan");
+        Log.d(TAG, "Stop scan");
+
+        _beaconCallback.stopScan();
+
+        btn_stopScan.setVisibility(View.GONE);
+
+        btn_Scan.setVisibility(View.VISIBLE);
+        btn_cleanUp.setVisibility(View.VISIBLE);
+
+    }
+
+
+    @Click(R.id.cleanUp)
+    void cleanUp() {
+
+        Log.d(TAG, "Clean up");
 
         textView_times.setText(Integer.toString(_scanTime = 0));
-
         textView_rssi.setText("00");
-
         textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
-        btn_reScan.setVisibility(View.GONE);
+        btn_cleanUp.setVisibility(View.GONE);
+        btn_storeResult.setVisibility(View.GONE);
+
+        btn_Scan.setVisibility(View.VISIBLE);
+        btn_setting.setVisibility(View.VISIBLE);
+
+    }
+
+    @Click(R.id.setting)
+    void setting() {
+
+        Log.d(TAG, "Setting");
+
+        btn_setting.setVisibility(View.GONE);
+        btn_Scan.setVisibility(View.GONE);
+
+        btn_chooseDistance.setVisibility(View.VISIBLE);
+        btn_chooseTxPower.setVisibility(View.VISIBLE);
 
     }
 
     @Click(R.id.chooseDistance)
     void chooseDistance() {
 
-        Intent intent = new Intent(this, ChooseDistanceActivity_.class);
-        startActivity(intent);
+        Log.d(TAG, "Choose distance");
 
-//        if (!_chooseDistance) {
-//
-//            btn_chooseDistance.setText("Next");
-//
-//            _chooseDistance = true;
-//
-//            btn_Scan.setVisibility(View.INVISIBLE);
-//
-//            btn_chooseDistance_ok.setVisibility(View.VISIBLE);
-//
-//        }
-//
-//        textView_rssi.setTextColor(getResources().getColor(R.color.blue_grey_500));
-//
-//        if (_currentTxPowerIndex == 4) _currentTxPowerIndex = 0;
-//
-//        switch (_currentTxPowerIndex) {
-//            case 0:
-//                textView_rssi.setText(getResources().getString(R.string.txPower_1m));
-//                break;
-//            case 1:
-//                textView_rssi.setText(getResources().getString(R.string.txPower_10m));
-//                break;
-//            case 2:
-//                textView_rssi.setText(getResources().getString(R.string.txPower_20m));
-//                break;
-//            case 3:
-//                textView_rssi.setText(getResources().getString(R.string.txPower_50m));
-//                break;
-//        }
-//
-//        _currentTxPowerIndex++;
+        btn_chooseDistance.setVisibility(View.GONE);
+        btn_chooseTxPower.setVisibility(View.GONE);
+
+        btn_setting.setVisibility(View.VISIBLE);
+        btn_Scan.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, ChooseDistanceActivity_.class);
+        startActivityForResult(intent, PICK_DISTANCE_REQUEST);
 
     }
 
-    @Click(R.id.chooseTxPower_ok)
-    void chooseTxPower_ok() {
+    @Click(R.id.chooseTxPower)
+    void chooseTxPower() {
 
-//        _chooseDistance = false;
-//
-//        textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
-//
-//        textView_rssi.setText("00");
-//
-//        btn_chooseDistance.setText(getResources().getString(R.string.distance));
-//
-//        btn_Scan.setVisibility(View.VISIBLE);
-//
-//        btn_chooseDistance_ok.setVisibility(View.GONE);
+        Log.d(TAG, "Choose txPower");
+
+        btn_chooseDistance.setVisibility(View.GONE);
+        btn_chooseTxPower.setVisibility(View.GONE);
+
+        btn_setting.setVisibility(View.VISIBLE);
+        btn_Scan.setVisibility(View.VISIBLE);
+
+        Intent intent = new Intent(this, ChooseTxPowerActivity_.class);
+        startActivityForResult(intent, PICK_TXPOWER_REQUEST);
+
+    }
+
+    @Click(R.id.storeResult)
+    void storeResult() {
+
+        Log.d(TAG, "Store result");
+
+        btn_storeResult.setVisibility(View.GONE);
+
+//        btn_cleanUp.callOnClick();
+        btn_cleanUp.performClick();
 
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public boolean bleInit() {
+    private boolean bleInit() {
 
         // Use this check to determine whether BLE is supported on the device. Then
         // you can selectively disable BLE-related features.
@@ -156,40 +183,29 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         BluetoothAdapter mBluetoothAdapter = bm.getAdapter();
 
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            int REQUEST_ENABLE_BT = 1001;
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             return false;
         }
 
-        if (_beaconCallback != null)
-            _beaconCallback.stopScan();
+        scanBeacon();
 
-        _beaconCallback = new BeaconScanCallback(this, this);
         return true;
 
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN && _scanTime != 100 && _beaconCallback != null) {
+    private void scanBeacon() {
 
-            if (_beaconCallback.isScanning()) {
-                _beaconCallback.stopScan();
-                textView_rssi.setTextColor(getResources().getColor(R.color.red_500));
-            } else {
+        if (_beaconCallback != null)
+            _beaconCallback.stopScan();
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    _beaconCallback.scan_lollipop();
-                } else _beaconCallback.scan_kitkat();
+        textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
-                textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
+        _beaconCallback = new BeaconScanCallback(this, this);
 
-            }
-
-        }
-        return super.onTouchEvent(event);
     }
+
+
 
     @Override
     @UiThread
@@ -200,21 +216,18 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 //        if(_scanTime == 0) excelBuilder.setCellByRowInOrder(beaconObject_rssi);
 //        excelBuilder.setCellByRowInOrder(beaconObject_rssi);
 
-        checkScanTime();
-
-    }
-
-    public void checkScanTime() {
-
         textView_times.setText(Integer.toString(++_scanTime));
 
-        if(_scanTime != 100) {
-            btn_reScan.setVisibility(View.GONE);
+        if (_scanTime != 100) {
+//            btn_reScan.setVisibility(View.GONE);
 //            excelBuilder.nextRow();
             return;
         }
 
-        btn_reScan.setVisibility(View.VISIBLE);
+        btn_stopScan.setVisibility(View.GONE);
+
+        btn_storeResult.setVisibility(View.VISIBLE);
+        btn_cleanUp.setVisibility(View.VISIBLE);
 
         textView_rssi.setTextColor(getResources().getColor(R.color.red_500));
 
@@ -226,16 +239,75 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         //     TODO
 }
 
+    @OnActivityResult(PICK_DISTANCE_REQUEST)
+    void onResult_distance(int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK && data != null) {
+
+            _currentDistance = data.getExtras().getInt("distance");
+
+            Log.d(TAG, "Chose distance : " + Integer.toString(_currentDistance));
+
+            textView_distance.setText(Integer.toString(_currentDistance));
+
+            textView_rssi.setTextColor(getResources().getColor(R.color.amber_700));
+
+            textView_rssi.setText(Integer.toString(_currentDistance));
+
+        }
+
+    }
+
+    @OnActivityResult(PICK_TXPOWER_REQUEST)
+    void onResult_txPower(int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK && data != null) {
+
+            _currentTxPower = data.getExtras().getString("txPower");
+
+            Log.d(TAG, "Chose txPower : " + _currentTxPower);
+
+            textView_rssi.setTextColor(getResources().getColor(R.color.light_green_600));
+
+            textView_rssi.setText(_currentTxPower);
+
+        }
+
+    }
+
+    @OnActivityResult(REQUEST_ENABLE_BT)
+    void onResult_enableBT(int resultCode) {
+
+        if(resultCode == RESULT_OK) {
+
+            Log.d(TAG, "Enable bluetooth");
+
+            scanBeacon();
+
+            btn_Scan.setVisibility(View.GONE);
+            btn_setting.setVisibility(View.GONE);
+            btn_cleanUp.setVisibility(View.GONE);
+
+            btn_stopScan.setVisibility(View.VISIBLE);
+
+        }
+
+        if(resultCode == RESULT_CANCELED) Log.d(TAG, "Unable bluetooth");
+
+    }
+
     @Override
     public void onResume() {
 
         super.onResume();
 
-        textView_rssi.setText("00");
+        if (textView_rssi.getText().length() == 0)
+            textView_rssi.setText("00");
 
         textView_times.setText(Integer.toString(_scanTime));
 
-//        textView_distance.setText(Integer.toString(_distance));
+        if (textView_distance.getText().length() == 0)
+            textView_distance.setText(Integer.toString(_currentDistance));
 
     }
 

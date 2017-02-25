@@ -20,7 +20,7 @@
 
     <string name="confirm_tx">确定</string>
     <string name="finish_tx">完成</string>
-    <string name="cancel_tx">取消</string>
+    <string name="cancel_tx" translatable="false">Cancel</string>
     <string name="parse_failed_title">资料异常</string>
     <string name="parse_failed">解析资料发生异常，请更新应用程式</string>
     <string name="not_oneplay_qr_content">请读取 Micro App</string>
@@ -52,16 +52,19 @@
     <string name="permission_location_enter">启用</string>
     <string name="floatbtnConfirmTitle">选取播放清单</string>
     <string name="selectIs">" 您选的是"</string>
-    <string name="distance_lable">Distance :</string>
-    <string name="times_lable">Times :</string>
-    <string name="scan">Scan</string>
-    <string name="scan_again">Clean up</string>
-    <string name="store_result">Store Result</string>
-    <string name="distance">Distance</string>
-    <string name="txPower_1m">1M</string>
-    <string name="txPower_10m">10M</string>
-    <string name="txPower_20m">20M</string>
-    <string name="txPower_50m">50M</string>
-    <string name="ok">OK</string>
+    <string name="distance_lable" translatable="false">Distance :</string>
+    <string name="times_lable" translatable="false">Times :</string>
+    <string name="scan" translatable="false">Scan</string>
+    <string name="scan_again" translatable="false">Clean up</string>
+    <string name="store_result" translatable="false">Store Result</string>
+    <string name="distance" translatable="false">Distance</string>
+    <string name="txPower_1m" translatable="false">1M</string>
+    <string name="txPower_10m" translatable="false">10M</string>
+    <string name="txPower_20m" translatable="false">20M</string>
+    <string name="txPower_50m" translatable="false">50M</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="stop_scan">Stop Scan</string>
+    <string name="setting">Setting</string>
+    <string name="txpower">txPower</string>
 
 </resources>

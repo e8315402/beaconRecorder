@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,8 +16,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/distance"
         android:textSize="18sp"
+        android:layout_alignBaseline="@+id/distance_lable"
         android:layout_alignBottom="@+id/distance_lable"
-        android:layout_alignStart="@+id/times" />
+        android:layout_alignStart="@+id/times"
+        android:clickable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/times"
+        android:textSize="18sp"
+        android:layout_marginStart="42dp"
+        android:layout_alignBaseline="@+id/times_lable"
+        android:layout_alignBottom="@+id/times_lable"
+        android:layout_toEndOf="@+id/times_lable"
+        android:clickable="false" />
 
     <TextView
         android:text="@string/times_lable"
@@ -24,10 +38,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/times_lable"
         android:textSize="22sp"
-        android:layout_marginStart="33dp"
-        android:layout_above="@+id/distance"
-        android:layout_alignStart="@+id/startScan"
-        android:layout_marginBottom="18dp" />
+        android:layout_marginStart="101dp"
+        android:clickable="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="221dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -35,9 +50,10 @@
         android:gravity="center_horizontal"
         android:id="@+id/rssi"
         android:textSize="150sp"
-        android:layout_marginTop="79dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:clickable="true"
+        android:layout_above="@+id/times_lable"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="35dp" />
 
     <TextView
         android:text="@string/distance_lable"
@@ -45,86 +61,85 @@
         android:layout_height="wrap_content"
         android:id="@+id/distance_lable"
         android:textSize="22sp"
-        android:layout_marginBottom="39dp"
-        android:layout_above="@+id/startScan"
+        android:layout_marginTop="20dp"
+        android:clickable="false"
+        android:layout_below="@+id/times"
         android:layout_alignEnd="@+id/times_lable" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/times"
-        android:textSize="18sp"
-        android:layout_marginStart="43dp"
-        android:layout_alignBottom="@+id/times_lable"
-        android:layout_toEndOf="@+id/times_lable" />
+    <Space
+        android:layout_width="271dp"
+        android:id="@+id/forAlign"
+        android:layout_height="45dp"
+        android:layout_marginTop="58dp"
+        android:layout_below="@+id/distance_lable"
+        android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/startScan"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        android:background="@drawable/rounded_rec_primary_color"
-        android:padding="@dimen/size_s"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:textColor="@color/white"
-        android:layout_marginBottom="73dp"
         android:text="@string/scan"
-        android:layout_alignParentBottom="true"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/startScan"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/distance_lable"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="320dp"
+        android:text="@string/stop_scan"
+        android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:id="@+id/reScan"
-        android:text="@string/scan_again"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_rec_primary_color"
-        android:elevation="0dp"
-        android:visibility="gone"
-        android:layout_alignBaseline="@+id/startScan"
-        android:layout_alignBottom="@+id/startScan"
-        android:layout_alignStart="@+id/startScan"
-        android:layout_alignEnd="@+id/startScan" />
-
-    <Button
-        android:text="@string/distance"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/chooseDistance"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_rec_primary_color"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/startScan"
-        android:layout_marginBottom="14dp"
-        android:layout_alignEnd="@+id/startScan" />
+        android:id="@+id/stopScan"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/distance_lable"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
     <Button
         android:text="@string/store_result"
-        android:layout_width="320dp"
+        android:layout_width="271dp"
         android:layout_height="wrap_content"
         android:id="@+id/storeResult"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_rec_primary_color"
-        android:visibility="gone"
-        android:layout_alignBaseline="@+id/chooseDistance"
-        android:layout_alignBottom="@+id/chooseDistance"
-        android:layout_alignStart="@+id/chooseDistance"
-        android:layout_alignEnd="@+id/chooseDistance" />
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/distance_lable"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
     <Button
-        android:layout_width="320dp"
+        android:text="@string/distance"
+        android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:id="@+id/chooseTxPower_ok"
-        android:text="@string/ok"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_rec_info_color"
-        android:elevation="0dp"
-        android:layout_alignBaseline="@+id/startScan"
-        android:layout_alignBottom="@+id/startScan"
+        android:id="@+id/chooseDistance"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/distance_lable"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <Button
+        android:text="@string/setting"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/setting"
+        android:layout_below="@+id/startScan"
         android:layout_alignStart="@+id/startScan"
-        android:layout_alignEnd="@+id/startScan"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:text="@string/txpower"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseTxPower"
+        android:layout_below="@+id/chooseDistance"
+        android:layout_alignStart="@+id/chooseDistance"
+        android:layout_marginTop="12dp"
+        android:visibility="gone" />
+
+    <Button
+        android:text="@string/scan_again"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/cleanUp"
+        android:layout_below="@+id/forAlign"
+        android:layout_alignStart="@+id/forAlign"
+        android:layout_marginTop="12dp"
         android:visibility="gone" />
 
 
