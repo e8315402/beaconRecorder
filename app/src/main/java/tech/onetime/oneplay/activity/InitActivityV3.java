@@ -13,15 +13,21 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import tech.onetime.oneplay.R;
-//import tech.onetime.oneplay.api.excelBuilder;
+import tech.onetime.oneplay.api.excelBuilder;
 import tech.onetime.oneplay.ble.BeaconScanCallback;
+import tech.onetime.oneplay.schema.BeaconObject;
+import tech.onetime.oneplay.schema.SettingState;
 
 
 @EActivity(R.layout.activity_init_activity_v3)
@@ -33,12 +39,11 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     private BeaconScanCallback _beaconCallback;
 
     private int _scanTime = 0;
-    private int _currentDistance = 1;
-    private String _currentTxPower = "";
 
-    static final int PICK_DISTANCE_REQUEST = 1;  // The request code
-    static final int PICK_TXPOWER_REQUEST = 2;
-    static final int REQUEST_ENABLE_BT = 1001;
+    private Queue<Integer> _scanResultQueue = new LinkedList<>();
+
+    static final int SETTING_REQUEST = 1;
+    static final int REQUEST_ENABLE_BT = 1001; // The request code
 
     @ViewById(R.id.startScan)
     Button btn_Scan;
@@ -48,19 +53,29 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     Button btn_cleanUp;
     @ViewById(R.id.setting)
     Button btn_setting;
-    @ViewById(R.id.chooseDistance)
-    Button btn_chooseDistance;
-    @ViewById(R.id.chooseTxPower)
-    Button btn_chooseTxPower;
     @ViewById(R.id.storeResult)
     Button btn_storeResult;
 
     @ViewById(R.id.rssi)
     TextView textView_rssi;
+    @ViewById(R.id.beacon)
+    TextView textView_beacon;
     @ViewById(R.id.times)
     TextView textView_times;
     @ViewById(R.id.distance)
     TextView textView_distance;
+    @ViewById(R.id.txPower)
+    TextView textView_txPower;
+
+//    @ViewById(R.id.forTEST)
+//    Button forTEST;
+//
+//    @Click(R.id.forTEST)
+//    void forTest() {
+//
+//        excelBuilder.readExcelFile(this, "temp.xls");
+//
+//    }
 
     @Click(R.id.startScan)
     void startScan() {
@@ -73,7 +88,6 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
             btn_cleanUp.setVisibility(View.GONE);
 
             btn_stopScan.setVisibility(View.VISIBLE);
-//            excelBuilder.createNewSheet(_txPower);
         }
 
     }
@@ -115,43 +129,8 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "Setting");
 
-        btn_setting.setVisibility(View.GONE);
-        btn_Scan.setVisibility(View.GONE);
-
-        btn_chooseDistance.setVisibility(View.VISIBLE);
-        btn_chooseTxPower.setVisibility(View.VISIBLE);
-
-    }
-
-    @Click(R.id.chooseDistance)
-    void chooseDistance() {
-
-        Log.d(TAG, "Choose distance");
-
-        btn_chooseDistance.setVisibility(View.GONE);
-        btn_chooseTxPower.setVisibility(View.GONE);
-
-        btn_setting.setVisibility(View.VISIBLE);
-        btn_Scan.setVisibility(View.VISIBLE);
-
-        Intent intent = new Intent(this, ChooseDistanceActivity_.class);
-        startActivityForResult(intent, PICK_DISTANCE_REQUEST);
-
-    }
-
-    @Click(R.id.chooseTxPower)
-    void chooseTxPower() {
-
-        Log.d(TAG, "Choose txPower");
-
-        btn_chooseDistance.setVisibility(View.GONE);
-        btn_chooseTxPower.setVisibility(View.GONE);
-
-        btn_setting.setVisibility(View.VISIBLE);
-        btn_Scan.setVisibility(View.VISIBLE);
-
-        Intent intent = new Intent(this, ChooseTxPowerActivity_.class);
-        startActivityForResult(intent, PICK_TXPOWER_REQUEST);
+        Intent intent = new Intent(this, SettingActivity_.class);
+        startActivityForResult(intent, SETTING_REQUEST);
 
     }
 
@@ -160,10 +139,27 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "Store result");
 
+        doSaveResult();
+
         btn_storeResult.setVisibility(View.GONE);
 
-//        btn_cleanUp.callOnClick();
         btn_cleanUp.performClick();
+
+    }
+
+    @Background
+    void doSaveResult() {
+
+        Log.d(TAG, "Saving result");
+
+//        excelBuilder.createNewSheet(_currentTxPower);
+
+        while(!_scanResultQueue.isEmpty()) {
+//            Log.d(TAG, Integer.toString(_scanResultQueue.poll()));
+            excelBuilder.setCellByRowInOrder(_scanResultQueue.poll());
+        }
+
+        excelBuilder.saveExcelFile(this, "temp.xls");
 
     }
 
@@ -188,13 +184,18 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
             return false;
         }
 
-        scanBeacon();
-
-        return true;
+        return scanBeacon();
 
     }
 
-    private void scanBeacon() {
+    private boolean scanBeacon() {
+
+        BeaconObject currentBeaconObject = SettingState.getInstance().get_currentBeaconObject();
+
+        if(currentBeaconObject == null) {
+            Toast.makeText(this, "You did not choose a USBeacon to scan.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
         if (_beaconCallback != null)
             _beaconCallback.stopScan();
@@ -202,14 +203,21 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
         _beaconCallback = new BeaconScanCallback(this, this);
+        _beaconCallback.setScanFilter(currentBeaconObject.mac);
+        _beaconCallback.startScan();
+
+        return true;
 
     }
 
 
-
     @Override
     @UiThread
-    public void scannedBeacons(int beaconObject_rssi) {
+    public void scannedBeacons(BeaconObject beaconObject) {
+
+        int beaconObject_rssi = beaconObject.rssi;
+
+        _scanResultQueue.offer(beaconObject_rssi);
 
         textView_rssi.setText(Integer.toString(beaconObject_rssi));
 
@@ -218,60 +226,31 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         textView_times.setText(Integer.toString(++_scanTime));
 
-        if (_scanTime != 100) {
-//            btn_reScan.setVisibility(View.GONE);
-//            excelBuilder.nextRow();
-            return;
-        }
+        if (_scanTime == 100) {
 
-        btn_stopScan.setVisibility(View.GONE);
+            btn_stopScan.setVisibility(View.GONE);
 
-        btn_storeResult.setVisibility(View.VISIBLE);
-        btn_cleanUp.setVisibility(View.VISIBLE);
+            btn_storeResult.setVisibility(View.VISIBLE);
+            btn_cleanUp.setVisibility(View.VISIBLE);
 
-        textView_rssi.setTextColor(getResources().getColor(R.color.red_500));
+            textView_rssi.setTextColor(getResources().getColor(R.color.red_500));
 
-        _beaconCallback.stopScan();
-
-    }
-
-    public void saveScanResult() {
-        //     TODO
-}
-
-    @OnActivityResult(PICK_DISTANCE_REQUEST)
-    void onResult_distance(int resultCode, Intent data) {
-
-        if (resultCode == RESULT_OK && data != null) {
-
-            _currentDistance = data.getExtras().getInt("distance");
-
-            Log.d(TAG, "Chose distance : " + Integer.toString(_currentDistance));
-
-            textView_distance.setText(Integer.toString(_currentDistance));
-
-            textView_rssi.setTextColor(getResources().getColor(R.color.amber_700));
-
-            textView_rssi.setText(Integer.toString(_currentDistance));
+            _beaconCallback.stopScan();
 
         }
 
     }
 
-    @OnActivityResult(PICK_TXPOWER_REQUEST)
-    void onResult_txPower(int resultCode, Intent data) {
+    @OnActivityResult(SETTING_REQUEST)
+    void onResult_setting(int resultCode) {
 
-        if (resultCode == RESULT_OK && data != null) {
+        if(resultCode == RESULT_OK) {
 
-            _currentTxPower = data.getExtras().getString("txPower");
-
-            Log.d(TAG, "Chose txPower : " + _currentTxPower);
-
-            textView_rssi.setTextColor(getResources().getColor(R.color.light_green_600));
-
-            textView_rssi.setText(_currentTxPower);
+            updateView();
 
         }
+
+        if(resultCode == RESULT_CANCELED);
 
     }
 
@@ -296,31 +275,36 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
     }
 
+    public void updateView() {
+
+        textView_rssi.setText("00");
+
+        textView_times.setText(Integer.toString(_scanTime));
+
+        textView_distance.setText(Integer.toString(SettingState.getInstance().get_currentDistance()));
+
+        textView_txPower.setText(SettingState.getInstance().get_currentTxPower());
+
+        if(SettingState.getInstance().get_currentBeaconObject() != null)
+            textView_beacon.setText(SettingState.getInstance().get_currentBeaconObject().getMajorMinorString());
+
+    }
+
     @Override
     public void onResume() {
 
         super.onResume();
 
-        if (textView_rssi.getText().length() == 0)
-            textView_rssi.setText("00");
+        if(textView_times.getText().length() == 0) updateView();
 
-        textView_times.setText(Integer.toString(_scanTime));
-
-        if (textView_distance.getText().length() == 0)
-            textView_distance.setText(Integer.toString(_currentDistance));
-
-    }
-
-    protected void onPause(){
-        super.onPause();
     }
 
     protected void onDestroy(){
+
         super.onDestroy();
-        if (_beaconCallback != null) {
-//            if(!excelBuilder.isFileSaved()) excelBuilder.saveExcelFile(this, "temp.xls");
-            _beaconCallback.stopScan();
-        }
+
+        if (_beaconCallback != null) _beaconCallback.stopScan();
+
     }
 
 }

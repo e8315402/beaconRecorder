@@ -52,6 +52,14 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".activity.SettingActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".activity.ChooseBeaconActivity_"
+            android:screenOrientation="portrait">
+        </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

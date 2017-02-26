@@ -70,8 +70,7 @@ public class LollipopScanCallback extends ScanCallback {
 //        Log.d(TAG, "patternFound : " + patternFound);
 
         if (patternFound) {
-//            BeaconObject object = new BeaconObject(device, rssi, scanRecord_bytes, startByte);
-            iEvent.lollipop_beaconScanned(rssi);
+            iEvent.lollipop_beaconScanned(new BeaconObject(device, rssi, scanRecord_bytes, startByte));
         }
     }
 
@@ -109,6 +108,6 @@ public class LollipopScanCallback extends ScanCallback {
         /**
          * lollipop - 偵測到 beacon (單一)
          * */
-        void lollipop_beaconScanned(int beaconObject_rssi);
+        void lollipop_beaconScanned(BeaconObject beaconObject);
     }
 }

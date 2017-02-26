@@ -32,83 +32,12 @@
         android:layout_toEndOf="@+id/times_lable"
         android:clickable="false" />
 
-    <TextView
-        android:text="@string/times_lable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/times_lable"
-        android:textSize="22sp"
-        android:layout_marginStart="101dp"
-        android:clickable="false"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="221dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:id="@+id/rssi"
-        android:textSize="150sp"
-        android:clickable="true"
-        android:layout_above="@+id/times_lable"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="35dp" />
-
-    <TextView
-        android:text="@string/distance_lable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/distance_lable"
-        android:textSize="22sp"
-        android:layout_marginTop="20dp"
-        android:clickable="false"
-        android:layout_below="@+id/times"
-        android:layout_alignEnd="@+id/times_lable" />
-
-    <Space
-        android:layout_width="271dp"
-        android:id="@+id/forAlign"
-        android:layout_height="45dp"
-        android:layout_marginTop="58dp"
-        android:layout_below="@+id/distance_lable"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:text="@string/scan"
-        android:layout_width="271dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/startScan"
-        android:layout_marginTop="56dp"
-        android:layout_below="@+id/distance_lable"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="@string/stop_scan"
-        android:layout_width="271dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/stopScan"
-        android:layout_marginTop="56dp"
-        android:layout_below="@+id/distance_lable"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone" />
-
     <Button
         android:text="@string/store_result"
         android:layout_width="271dp"
         android:layout_height="wrap_content"
         android:id="@+id/storeResult"
-        android:layout_marginTop="56dp"
-        android:layout_below="@+id/distance_lable"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone" />
-
-    <Button
-        android:text="@string/distance"
-        android:layout_width="271dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/chooseDistance"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="61dp"
         android:layout_below="@+id/distance_lable"
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
@@ -123,13 +52,70 @@
         android:layout_marginTop="12dp" />
 
     <Button
-        android:text="@string/txpower"
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/forTEST"
+        android:visibility="gone" />
+
+    <Space
+        android:layout_width="271dp"
+        android:id="@+id/forAlign"
+        android:layout_height="45dp"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/txPower_lable"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txPower"
+        android:textSize="18sp"
+        android:clickable="false"
+        android:layout_alignBaseline="@+id/txPower_lable"
+        android:layout_alignBottom="@+id/txPower_lable"
+        android:layout_alignStart="@+id/distance" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txPower_lable"
+        android:textSize="22sp"
+        android:layout_marginTop="17dp"
+        android:clickable="false"
+        android:text="@string/txpower_lable"
+        android:layout_below="@+id/distance_lable"
+        android:layout_alignStart="@+id/distance_lable" />
+
+    <TextView
+        android:text="@string/distance_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distance_lable"
+        android:textSize="22sp"
+        android:layout_marginTop="18dp"
+        android:clickable="false"
+        android:layout_below="@+id/times"
+        android:layout_alignEnd="@+id/times_lable" />
+
+    <Button
+        android:text="@string/scan"
         android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:id="@+id/chooseTxPower"
-        android:layout_below="@+id/chooseDistance"
-        android:layout_alignStart="@+id/chooseDistance"
-        android:layout_marginTop="12dp"
+        android:id="@+id/startScan"
+        android:layout_alignTop="@+id/forAlign"
+        android:layout_alignStart="@+id/forAlign" />
+
+    <Button
+        android:text="@string/stop_scan"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/stopScan"
+        android:layout_marginTop="61dp"
+        android:layout_below="@+id/distance_lable"
+        android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
     <Button
@@ -137,10 +123,51 @@
         android:layout_width="271dp"
         android:layout_height="wrap_content"
         android:id="@+id/cleanUp"
+        android:visibility="gone"
         android:layout_below="@+id/forAlign"
         android:layout_alignStart="@+id/forAlign"
-        android:layout_marginTop="12dp"
-        android:visibility="gone" />
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:text="Beacon :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/beacon_lable"
+        android:layout_marginBottom="12dp"
+        android:textSize="22sp"
+        android:layout_above="@+id/times_lable"
+        android:layout_alignEnd="@+id/times_lable" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/rssi"
+        android:textSize="150sp"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp" />
+
+    <TextView
+        android:text="@string/times_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/times_lable"
+        android:textSize="22sp"
+        android:layout_marginStart="58dp"
+        android:clickable="false"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/forAlign" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/beacon"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/beacon_lable"
+        android:layout_alignBottom="@+id/beacon_lable"
+        android:layout_alignStart="@+id/times" />
 
 
 </RelativeLayout>

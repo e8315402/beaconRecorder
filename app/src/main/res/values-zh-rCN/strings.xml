@@ -1,54 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">OnePlay</string>
-    <string name="read_onePlay_qr">OnePlay服务</string>
 
-    <string name="setting_abstring">连线设定</string>
-    <string name="setting_wifi_enable">开启Wifi</string>
-    <string name="setting_wifi_ssid">连接到 %1$s</string>
-    <string name="setting_wifi_pwd">密码：%1$s</string>
-    <string name="setting_success">完成连线设定</string>
-    <string name="setting_msg_wifiEnable_failed">尚未开启</string>
-    <string name="setting_retrying_btnTx">连线中...</string>
-    <string name="setting_retry_btnTx">重新连接</string>
-    <string name="setting_done_btnTx">OnePlay</string>
-
-    <string name="loading_tx">读取中...</string>
     <string name="no_network">请先开启网路</string>
     <string name="connection_failed">请您稍后再尝试一次</string>
     <string name="connection_error_code">错误 %s</string>
 
     <string name="confirm_tx">确定</string>
-    <string name="finish_tx">完成</string>
-    <string name="parse_failed_title">资料异常</string>
-    <string name="parse_failed">解析资料发生异常，请更新应用程式</string>
-    <string name="not_oneplay_qr_content">请读取 Micro App</string>
-
-    <string name="ssid_failed_dgTitle">Wifi 设定</string>
-    <string name="ssid_failed_content">请连线到\nWifi: %1$s \n密码: %2$s</string>
-
-    <string name="connectionFailed_dialog_title">连线错误</string>
-    <string name="connectionFailed_dialog_content">连线发生异常，请稍后尝试</string>
-    <string name="connectionFailed_getting_videoId">读取资源失败</string>
-    <string name="connectionFailed_initSocketIO">初始网路失败，请重新启动</string>
-    <string name="ble_not_supported">本装置不支援低电量蓝芽设备</string>
-    <string name="qr_not_init">请先读取 Micro App</string>
 
     <string name="close_tx">关闭</string>
-    <string name="qr_abstring">QR Code</string>
 
-    <string name="play_abstring">OnePlay</string>
-    <string name="play_playingName">正在播放: %s</string>
-    <string name="play_playingNameInit">等候读取 ...</string>
-    <string name="play_qr">读取 Micro App</string>
-    <string name="play_auto">拨放 One Play</string>
-    <string name="play_around">附近</string>
-    <string name="play_push">PUSH MODE</string>
-
-    <string name="permission_location_dialog">启用要求</string>
-    <string name="permission_location_content">请先启用位置资讯，才能完整使用OnePlay应用</string>
-    <string name="permission_location_cancel">取消</string>
-    <string name="permission_location_enter">启用</string>
     <string name="floatbtnConfirmTitle">选取播放清单</string>
     <string name="selectIs"> 您选的是</string>
 </resources>

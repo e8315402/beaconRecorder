@@ -42,9 +42,8 @@ public class KitkatScanCallback implements BluetoothAdapter.LeScanCallback {
 
         // 如果找到了的话
         if (patternFound) {
-//            BeaconObject object = new BeaconObject(device, rssi, scanRecord, startByte);
             if (iEvent != null)
-                iEvent.kitkat_beaconScanned(rssi);
+                iEvent.kitkat_beaconScanned(new BeaconObject(device, rssi, scanRecord, startByte));
         }
 
     }
@@ -58,7 +57,7 @@ public class KitkatScanCallback implements BluetoothAdapter.LeScanCallback {
         /**
          * kitkat - 偵測到 beacon (單一)
          */
-        void kitkat_beaconScanned(int beaconObject_rssi);
+        void kitkat_beaconScanned(BeaconObject beaconObject);
     }
 
 }

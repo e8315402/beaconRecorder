@@ -3,7 +3,6 @@ package tech.onetime.oneplay.api;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -36,7 +35,7 @@ public class excelBuilder {
 
     private static String _currentSheetName = null;
     private static int _currentRowIndex = 1;
-    private static int _currentCellIndex = 0;
+    private static int _currentCellIndex = 1;
 
     private static boolean _fileSaved = true;
 
@@ -103,11 +102,15 @@ public class excelBuilder {
             return;
         }
 
-        Row rowTemp = shTemp.createRow(_currentRowIndex);
+        Row rowTemp = shTemp.getRow(_currentRowIndex);
+
+        if(rowTemp == null) rowTemp = shTemp.createRow(_currentRowIndex);
 
         Cell cellTemp = rowTemp.createCell(_currentCellIndex);
 
         cellTemp.setCellValue(content);
+
+//        Log.d(TAG, "put value : " + Integer.toString(content));
 
         _currentCellIndex++;
 
@@ -135,25 +138,6 @@ public class excelBuilder {
 
         boolean success = false;
 
-        //New Workbook
-//        Workbook wb = new HSSFWorkbook();
-
-//        Cell c = null;
-
-        //Cell style for header row
-//        CellStyle cs = wb.createCellStyle();
-//        cs.setFillForegroundColor(HSSFColor.LIME.index);
-//        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-
-        //New Sheet
-//        Sheet sheet1 = null;
-//        sheet1 = wb.createSheet("myOrder");
-
-        // Generate column headings
-//        Row row = sheet1.createRow(0);
-//        c = row.createCell(0);
-//        c.setCellValue("Item Number");
-
         // Create a path where we will place our List of objects on external storage
         File file = new File(context.getExternalFilesDir(null), fileName);
         FileOutputStream os = null;
@@ -179,7 +163,6 @@ public class excelBuilder {
         return success;
     }
 
-    @Deprecated
     public static void readExcelFile(Context context, String filename) {
 
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
@@ -210,7 +193,6 @@ public class excelBuilder {
                 while(cellIter.hasNext()){
                     HSSFCell myCell = (HSSFCell) cellIter.next();
                     Log.d(TAG, "Cell Value: " +  myCell.toString());
-                    Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception e) {

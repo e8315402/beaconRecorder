@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:weightSum="1">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.26" />
+
+    <TextView
+        android:text="@string/setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_weight="0.07"
+        android:textSize="48sp"
+        android:textAlignment="center"
+        android:gravity="center" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.06" />
+
+    <Button
+        android:text="@string/distance"
+        android:layout_width="315dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseDistance"
+        android:layout_weight="0.03" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
+
+    <Button
+        android:text="@string/txpower"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseTxPower"
+        android:layout_width="315dp"
+        android:layout_weight="0.03" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
+
+    <Button
+        android:text="@string/beacon"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseBeacon"
+        android:layout_width="315dp"
+        android:layout_weight="0.03" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
+
+    <Button
+        android:text="@string/file"
+        android:layout_height="wrap_content"
+        android:id="@+id/setFile"
+        android:layout_width="315dp"
+        android:layout_weight="0.03" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.19" />
+
+    <Button
+        android:text="@string/ok"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rec_primary_color"
+        android:id="@+id/saveSetting"
+        android:layout_width="315dp"
+        android:layout_weight="0.03" />
+
+
+</LinearLayout>

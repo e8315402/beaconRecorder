@@ -4,20 +4,17 @@ import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.os.Build;
-//import android.os.ParcelUuid;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import tech.onetime.oneplay.schema.BeaconObject;
-//import tech.onetime.oneplay.schema.DisplayObject;
-//import tech.onetime.oneplay.schema.OnePlayMicroApp;
+import tech.onetime.oneplay.schema.BeaconObject;
+
 
 /**
  * Created by Alexandro on 2016/7/5.
@@ -33,8 +30,9 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
     private KitkatScanCallback kitkatLeScanCallback;
 
     private BluetoothAdapter mBluetoothAdapter;
+    private List<ScanFilter> _scanFilters;
 
-    private boolean scanning = false;
+//    private boolean scanning = false;
 
     public BeaconScanCallback(Context ctx, iBeaconScanCallback scanCallback) {
 
@@ -43,106 +41,98 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
         BluetoothManager bm = (BluetoothManager) ctx.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bm.getAdapter();
 
-        int apiVersion = Build.VERSION.SDK_INT;
-        if (apiVersion > Build.VERSION_CODES.KITKAT) {
-            scan_lollipop();
-        } else {
-            scan_kitkat();
-        }
+        _scanFilters = new ArrayList<>();
+//        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
+//        filterBuilder.setDeviceName("USBeacon");
+        _scanFilters.add(new ScanFilter.Builder().setDeviceName("USBeacon").build());
 
     }
 
     public interface iBeaconScanCallback {
 
-        void scannedBeacons(int beaconObject_rssi);
+        void scannedBeacons(BeaconObject beaconObject);
+
+    }
+
+    public void startScan() {
+
+        int apiVersion = Build.VERSION.SDK_INT;
+
+        if (apiVersion > Build.VERSION_CODES.KITKAT)
+            scan_lollipop();
+        else scan_kitkat();
 
     }
 
     /**
-     * android 4.4 的 scan
+     * android 4.4
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void scan_kitkat() {
+    private void scan_kitkat() {
 
         Log.d(TAG, "scan_kitkat");
 
         kitkatLeScanCallback = new KitkatScanCallback(this);
         mBluetoothAdapter.startLeScan(kitkatLeScanCallback);
 
-        scanning = true;
+//        scanning = true;
 
     }
 
-//    @TargetApi(Build.VERSION_CODES.M)
-//    private void scan_lollipop_setting() {
-//
-//        BluetoothLeScanner scanner = mBluetoothAdapter.getBluetoothLeScanner();
-//        List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
-//
-//        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
-//        filterBuilder.setDeviceName("USBeacon");
-//        scanFilters.add(filterBuilder.build());
-//
-//        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
-////        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
-//        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-//        scanSettingsBuilder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
-//        lollipopScanCallback = new LollipopScanCallback(this);
-//
-//        scan_lollipop(scanner, scanFilters, scanSettingsBuilder.build(), lollipopScanCallback);
-//
-//    }
-
     /**
-     * android 5.0 的 scan
+     * android 5.0
      */
     @TargetApi(Build.VERSION_CODES.M)
-    public void scan_lollipop() {
+    private void scan_lollipop() {
 
         Log.d(TAG, "scan_lollipop");
 
-        BluetoothLeScanner scanner = mBluetoothAdapter.getBluetoothLeScanner();
-        List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
-
-        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
-        filterBuilder.setDeviceName("USBeacon");
-        filterBuilder.setDeviceAddress("C4:BE:84:21:D2:25");
-        scanFilters.add(filterBuilder.build());
-
-        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
-//        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
-//        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
-        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
-        scanSettingsBuilder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
         lollipopScanCallback = new LollipopScanCallback(this);
 
-        scanner.startScan(scanFilters, scanSettingsBuilder.build(), lollipopScanCallback);
+        ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
+        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
+        scanSettingsBuilder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
+//        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+//        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
-        scanning = true;
+        BluetoothLeScanner scanner = mBluetoothAdapter.getBluetoothLeScanner();
+        scanner.startScan(_scanFilters, scanSettingsBuilder.build(), lollipopScanCallback);
+
+//        scanning = true;
 
     }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void setScanFilter(String deviceAddress) {
+
+        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
+        filterBuilder.setDeviceAddress(deviceAddress);
+        _scanFilters.add(filterBuilder.build());
+
+    }
+
 
     /**
      * kitkat - 偵測到 beacon
      *
-     * @param beaconObject_rssi is the rssi after bluetooth scanning
+     * @param beaconObject is the object include beacon attribute
      */
     @Override
-    public void kitkat_beaconScanned(int beaconObject_rssi) {
+    public void kitkat_beaconScanned(BeaconObject beaconObject) {
 
-            scanCallback.scannedBeacons(beaconObject_rssi);
+            scanCallback.scannedBeacons(beaconObject);
 
     }
 
     /**
      * lollipop - 偵測到 beacon
      *
-     * @param beaconObject_rssi is the rssi after bluetooth scanning
+     * @param beaconObject  is the object include beacon attribute
      */
     @Override
-    public void lollipop_beaconScanned(int beaconObject_rssi) {
+    public void lollipop_beaconScanned(BeaconObject beaconObject) {
 
-        scanCallback.scannedBeacons(beaconObject_rssi);
+        scanCallback.scannedBeacons(beaconObject);
 
     }
 
@@ -161,18 +151,20 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
                     kitkatLeScanCallback.stopDetect();
             }
 
-            scanning = false;
+//            scanning = false;
 
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
     }
 
-    public boolean isScanning() {
-
-        return scanning;
-
-    }
+//    public boolean isScanning() {
+//
+//        return scanning;
+//
+//    }
 
 }

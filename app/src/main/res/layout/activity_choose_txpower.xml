@@ -13,7 +13,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="285dp">
+            android:layout_height="286dp">
 
             <TextView
                 android:text="@string/txPower_20m"
@@ -41,7 +41,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <TextView
                 android:text="@string/txPower_1m"
@@ -52,7 +53,8 @@
                 android:layout_weight="1.00"
                 android:textSize="80sp"
                 android:gravity="center"
-                android:clickable="true" />
+                android:clickable="true"
+                android:textAllCaps="false" />
 
             <TextView
                 android:text="@string/txPower_10m"

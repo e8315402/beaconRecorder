@@ -2,12 +2,18 @@ package tech.onetime.oneplay.schema;
 
 import android.bluetooth.BluetoothDevice;
 
+import java.io.Serializable;
+
 /**
  * Created by Alexandro on 2016/7/5.
  */
-public class BeaconObject {
+public class BeaconObject implements Serializable{
+
+    private static final long serialVersionUID = -7060210544600464481L;
+
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
-    public boolean hasObject = false;
+//    public boolean hasObject = false;
+
     public String mac, deviceName, uuid;
     public int major, minor;
     public int rssi;
@@ -86,4 +92,6 @@ public class BeaconObject {
     public String getMajorMinorString(){
         return ObjUtils.getMajorMinorString(major, minor);
     }
+
+
 }
