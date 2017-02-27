@@ -2,7 +2,6 @@ package tech.onetime.oneplay.api;
 
 import android.content.Context;
 import android.os.Environment;
-import android.support.annotation.IntRange;
 import android.util.Log;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -21,14 +20,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-
 /**
  * Created by JianFa on 2017/2/24
  */
 
-public class excelBuilder {
+public class ExcelBuilder {
 
-    public static final String TAG = "excelBuilder";
+    public static final String TAG = "ExcelBuilder";
 
     private static Workbook _wb = null;
 
@@ -131,6 +129,26 @@ public class excelBuilder {
 
     }
 
+
+    private static void setHeaderOfSheet(String sheetName) {
+
+        Sheet shTemp = _wb.getSheet(sheetName);
+
+        Row rowTemp = shTemp.createRow(0);
+        for(int cellIndex = 1 ; cellIndex <= 100 ; cellIndex++ )
+            rowTemp.createCell(cellIndex).setCellValue(cellIndex);
+
+        for(int rowIndex = 0 ; rowIndex < 10 ; rowIndex++ )
+            shTemp.createRow(rowIndex + 1).createCell(0).setCellValue(distances[rowIndex]);
+
+    }
+
+    public static Workbook Build() {
+
+        return _wb;
+
+    }
+
     public static boolean saveExcelFile(Context context, String fileName) {
 
         // check if available and not read only
@@ -142,7 +160,7 @@ public class excelBuilder {
         boolean success = false;
 
         // Create a path where we will place our List of objects on external storage
-        File file = new File(context.getExternalFilesDir(null), fileName);
+        File file = new File(context.getExternalFilesDir(null), fileName + ".xls");
         FileOutputStream os = null;
 
         try {
@@ -166,7 +184,7 @@ public class excelBuilder {
     }
 
     @Deprecated
-    public static void readExcelFile(Context context, String filename) {
+    public static void readExcelFile(Context context, String fileName) {
 
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             Log.e(TAG, "Storage not available or read only");
@@ -175,7 +193,7 @@ public class excelBuilder {
 
         try{
             // Creating Input Stream
-            File file = new File(context.getExternalFilesDir(null), filename);
+            File file = new File(context.getExternalFilesDir(null), fileName + ".xls");
             FileInputStream myInput = new FileInputStream(file);
 
             // Create a POIFSFileSystem object
@@ -213,25 +231,13 @@ public class excelBuilder {
         return false;
     }
 
+
     public static boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
             return true;
         }
         return false;
-    }
-
-    private static void setHeaderOfSheet(String sheetName) {
-
-        Sheet shTemp = _wb.getSheet(sheetName);
-
-        Row rowTemp = shTemp.createRow(0);
-        for(int cellIndex = 1 ; cellIndex <= 100 ; cellIndex++ )
-            rowTemp.createCell(cellIndex).setCellValue(cellIndex);
-
-        for(int rowIndex = 0 ; rowIndex < 10 ; rowIndex++ )
-            shTemp.createRow(rowIndex + 1).createCell(0).setCellValue(distances[rowIndex]);
-
     }
 
 }

@@ -30,9 +30,7 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
     private KitkatScanCallback kitkatLeScanCallback;
 
     private BluetoothAdapter mBluetoothAdapter;
-    private List<ScanFilter> _scanFilters;
-
-//    private boolean scanning = false;
+    private ScanFilter.Builder _filterBuilder;
 
     public BeaconScanCallback(Context ctx, iBeaconScanCallback scanCallback) {
 
@@ -40,11 +38,6 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
 
         BluetoothManager bm = (BluetoothManager) ctx.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bm.getAdapter();
-
-        _scanFilters = new ArrayList<>();
-//        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
-//        filterBuilder.setDeviceName("USBeacon");
-        _scanFilters.add(new ScanFilter.Builder().setDeviceName("USBeacon").build());
 
     }
 
@@ -89,6 +82,11 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
 
         lollipopScanCallback = new LollipopScanCallback(this);
 
+        List<ScanFilter> scanFilters = new ArrayList<>();
+        if(_filterBuilder == null) _filterBuilder = new ScanFilter.Builder();
+        _filterBuilder.setDeviceName("USBeacon");
+        scanFilters.add(_filterBuilder.build());
+
         ScanSettings.Builder scanSettingsBuilder = new ScanSettings.Builder();
         scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
         scanSettingsBuilder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES);
@@ -96,18 +94,15 @@ public class BeaconScanCallback implements KitkatScanCallback.iKitkatScanCallbac
 //        scanSettingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
 
         BluetoothLeScanner scanner = mBluetoothAdapter.getBluetoothLeScanner();
-        scanner.startScan(_scanFilters, scanSettingsBuilder.build(), lollipopScanCallback);
-
-//        scanning = true;
+        scanner.startScan(scanFilters, scanSettingsBuilder.build(), lollipopScanCallback);
 
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public void setScanFilter(String deviceAddress) {
+    public void setScanFilter_address(String deviceAddress) {
 
-        ScanFilter.Builder filterBuilder = new ScanFilter.Builder();
-        filterBuilder.setDeviceAddress(deviceAddress);
-        _scanFilters.add(filterBuilder.build());
+        if(_filterBuilder == null) _filterBuilder = new ScanFilter.Builder();
+        _filterBuilder.setDeviceAddress(deviceAddress);
 
     }
 

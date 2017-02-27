@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import tech.onetime.oneplay.R;
-import tech.onetime.oneplay.api.excelBuilder;
+import tech.onetime.oneplay.api.ExcelBuilder;
 import tech.onetime.oneplay.ble.BeaconScanCallback;
 import tech.onetime.oneplay.schema.BeaconObject;
 import tech.onetime.oneplay.schema.SettingState;
@@ -67,16 +67,12 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     @ViewById(R.id.txPower)
     TextView textView_txPower;
 
-    @ViewById(R.id.forTEST)
-    Button forTEST;
-
-    @Click(R.id.forTEST)
-    @Background
-    void forTest() {
-
-        excelBuilder.setCurrentRowByDistance(50);
-
-    }
+//    @ViewById(R.id.forTEST)
+//    Button forTEST;
+//
+//    @Click(R.id.forTEST)
+//    void forTest() {
+//    }
 
     @Click(R.id.startScan)
     void startScan() {
@@ -144,8 +140,6 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         btn_storeResult.setVisibility(View.GONE);
 
-//        nextState();
-
         btn_cleanUp.performClick();
 
     }
@@ -155,19 +149,21 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "Saving result");
 
-        excelBuilder.setCurrentSheet(SettingState.getInstance().get_currentTxPower());
+        ExcelBuilder.setCurrentSheet(SettingState.getInstance().get_currentTxPower());
 
-        excelBuilder.setCurrentRowByDistance(SettingState.getInstance().get_currentDistance());
+        ExcelBuilder.setCurrentRowByDistance(SettingState.getInstance().get_currentDistance());
 
         while(!_scanResultQueue.isEmpty()) {
-            excelBuilder.setCellByRowInOrder(_scanResultQueue.poll());
+            ExcelBuilder.setCellByRowInOrder(_scanResultQueue.poll());
         }
 
-        excelBuilder.saveExcelFile(this, "temp.xls");
+        ExcelBuilder.saveExcelFile(this, "temp");
 
-        excelBuilder.setCurrentCell(1);
+        ExcelBuilder.setCurrentCell(1);
 
-//        nextState();
+        nextState();
+
+        updateView();
 
     }
 
@@ -211,7 +207,8 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
         _beaconCallback = new BeaconScanCallback(this, this);
-        _beaconCallback.setScanFilter(currentBeaconObject.mac);
+//        Log.d(TAG, "scanBeacon __ set beacon mac : " + currentBeaconObject.mac);
+        _beaconCallback.setScanFilter_address(currentBeaconObject.mac);
         _beaconCallback.startScan();
 
         return true;
@@ -282,6 +279,7 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
     }
 
+    @UiThread
     public void updateView() {
 
         Log.d(TAG, "updateView");
