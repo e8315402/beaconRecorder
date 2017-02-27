@@ -1,5 +1,7 @@
 package tech.onetime.beaconRecoder.activity;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -9,6 +11,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import tech.onetime.beaconRecoder.R;
+import tech.onetime.beaconRecoder.schema.SettingState;
 
 /**
  * Created by JianFa on 2017/2/25
@@ -52,6 +55,30 @@ public class ChooseTxPowerActivity extends AppCompatActivity {
         bundle.putString("txPower", txPower);
         setResult(RESULT_OK, ChooseTxPowerActivity.this.getIntent().putExtras(bundle));
         ChooseTxPowerActivity.this.finish();
+
+    }
+
+    @Override
+    public void onResume() {
+
+        String currentTxPower = SettingState.getInstance().get_currentTxPower();
+
+        switch (currentTxPower) {
+            case "1M":
+                textView_txPower_1m.setTextColor(getResources().getColor(R.color.green_700));
+                break;
+            case "10M":
+                textView_txPower_10m.setTextColor(getResources().getColor(R.color.green_700));
+                break;
+            case "20M":
+                textView_txPower_20m.setTextColor(getResources().getColor(R.color.green_700));
+                break;
+            case "50M":
+                textView_txPower_50m.setTextColor(getResources().getColor(R.color.green_700));
+                break;
+        }
+
+        super.onResume();
 
     }
 
