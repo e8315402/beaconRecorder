@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OnePlay</string>
+    <string name="app_name">BeaconRecoder</string>
 
     <string name="no_network">请先开启网路</string>
     <string name="connection_failed">请您稍后再尝试一次</string>
@@ -23,11 +23,11 @@
     <string name="txPower_20m" translatable="false">20M</string>
     <string name="txPower_50m" translatable="false">50M</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="stop_scan">Stop Scan</string>
-    <string name="setting">Setting</string>
-    <string name="txpower">txPower</string>
-    <string name="beacon">Beacon</string>
-    <string name="file">File</string>
-    <string name="txpower_lable">TxPower :</string>
+    <string name="stop_scan" translatable="false">Stop Scan</string>
+    <string name="setting" translatable="false">Setting</string>
+    <string name="txpower" translatable="false">txPower</string>
+    <string name="beacon" translatable="false">Beacon</string>
+    <string name="file" translatable="false">File</string>
+    <string name="txpower_lable" translatable="false">TxPower :</string>
 
 </resources>

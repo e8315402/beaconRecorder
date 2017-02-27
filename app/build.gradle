@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "tech.onetime.oneplay"
+        applicationId "tech.onetime.beaconRecoder"
         minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
@@ -69,7 +69,7 @@ dependencies {
 apt {
     arguments {
         androidManifestFile variant.outputs[0].processResources.manifestFile
-        resourcePackageName "tech.onetime.oneplay"
+        resourcePackageName "tech.onetime.beaconRecoder"
     }
 }
 tasks.withType(JavaCompile) {
