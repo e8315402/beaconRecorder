@@ -67,15 +67,16 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     @ViewById(R.id.txPower)
     TextView textView_txPower;
 
-//    @ViewById(R.id.forTEST)
-//    Button forTEST;
-//
-//    @Click(R.id.forTEST)
-//    void forTest() {
-//
-//        excelBuilder.readExcelFile(this, "temp.xls");
-//
-//    }
+    @ViewById(R.id.forTEST)
+    Button forTEST;
+
+    @Click(R.id.forTEST)
+    @Background
+    void forTest() {
+
+        excelBuilder.setCurrentRowByDistance(50);
+
+    }
 
     @Click(R.id.startScan)
     void startScan() {
@@ -90,7 +91,7 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
             btn_stopScan.setVisibility(View.VISIBLE);
         }
 
-    }
+}
 
     @Click(R.id.stopScan)
     void stopScan() {
@@ -143,6 +144,8 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         btn_storeResult.setVisibility(View.GONE);
 
+//        nextState();
+
         btn_cleanUp.performClick();
 
     }
@@ -152,14 +155,19 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "Saving result");
 
-//        excelBuilder.createNewSheet(_currentTxPower);
+        excelBuilder.setCurrentSheet(SettingState.getInstance().get_currentTxPower());
+
+        excelBuilder.setCurrentRowByDistance(SettingState.getInstance().get_currentDistance());
 
         while(!_scanResultQueue.isEmpty()) {
-//            Log.d(TAG, Integer.toString(_scanResultQueue.poll()));
             excelBuilder.setCellByRowInOrder(_scanResultQueue.poll());
         }
 
         excelBuilder.saveExcelFile(this, "temp.xls");
+
+        excelBuilder.setCurrentCell(1);
+
+//        nextState();
 
     }
 
@@ -221,9 +229,6 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         textView_rssi.setText(Integer.toString(beaconObject_rssi));
 
-//        if(_scanTime == 0) excelBuilder.setCellByRowInOrder(beaconObject_rssi);
-//        excelBuilder.setCellByRowInOrder(beaconObject_rssi);
-
         textView_times.setText(Integer.toString(++_scanTime));
 
         if (_scanTime == 100) {
@@ -261,13 +266,15 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
             Log.d(TAG, "Enable bluetooth");
 
-            scanBeacon();
+            if(scanBeacon()) {
 
-            btn_Scan.setVisibility(View.GONE);
-            btn_setting.setVisibility(View.GONE);
-            btn_cleanUp.setVisibility(View.GONE);
+                btn_Scan.setVisibility(View.GONE);
+                btn_setting.setVisibility(View.GONE);
+                btn_cleanUp.setVisibility(View.GONE);
 
-            btn_stopScan.setVisibility(View.VISIBLE);
+                btn_stopScan.setVisibility(View.VISIBLE);
+
+            }
 
         }
 
@@ -276,6 +283,8 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     }
 
     public void updateView() {
+
+        Log.d(TAG, "updateView");
 
         textView_rssi.setText("00");
 
@@ -290,10 +299,28 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
     }
 
+    public void nextState() {
+
+        if(SettingState.getInstance().get_currentDistance() != 50) {
+
+            SettingState.getInstance().set_theNextDistance();
+            Log.d(TAG, "nextState __ the next distance : " + Integer.toString(SettingState.getInstance().get_currentDistance()));
+
+        } else {
+
+            SettingState.getInstance().set_theNextTxPower();
+            SettingState.getInstance().set_currentDistance(1);
+
+        }
+
+    }
+
     @Override
     public void onResume() {
 
         super.onResume();
+
+        Log.d(TAG, "onResume");
 
         if(textView_times.getText().length() == 0) updateView();
 

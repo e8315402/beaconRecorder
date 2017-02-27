@@ -1,5 +1,7 @@
 package tech.onetime.oneplay.schema;
 
+import android.util.Log;
+
 /**
  * Created by JianFa on 2017/2/26
  */
@@ -10,6 +12,9 @@ public class SettingState {
     private String _currentTxPower = "1M";
     private BeaconObject _currentBeaconObject = null;
     private String _fileName = null;
+
+    private int[] distances = {1, 2, 3, 5, 8, 10, 20, 30, 40, 50};
+    private String[] txPowers = {"1M", "10M", "20M", "50M"};
 
     private static SettingState _instance = new SettingState();
 
@@ -49,6 +54,34 @@ public class SettingState {
 
     public String get_fileName() {
         return _fileName;
+    }
+
+    public void set_theNextDistance() {
+
+        if(_currentDistance != 50) {
+
+            int distanceIndex = 0;
+            while (distanceIndex < 10)
+                if(distances[distanceIndex++] == _currentDistance) break;
+
+            _currentDistance = distances[distanceIndex];
+
+        }
+
+    }
+
+    public void set_theNextTxPower() {
+
+        if(_currentTxPower.compareTo("50M") != 0) {
+
+            int txPowerIndex = 0;
+            while(txPowerIndex < 4)
+                if(txPowers[txPowerIndex++].compareTo(_currentTxPower) == 0) break;
+
+            _currentTxPower = txPowers[txPowerIndex];
+
+        }
+
     }
 
 }

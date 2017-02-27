@@ -2,6 +2,7 @@ package tech.onetime.oneplay.api;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.IntRange;
 import android.util.Log;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -18,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -31,80 +31,58 @@ public class excelBuilder {
     public static final String TAG = "excelBuilder";
 
     private static Workbook _wb = null;
-    private static HashMap<String, Sheet> _sheetHashMap = null;
 
-    private static String _currentSheetName = null;
+    private static String _currentSheetName = "1M";
     private static int _currentRowIndex = 1;
     private static int _currentCellIndex = 1;
 
-    private static boolean _fileSaved = true;
+    private static int[] distances = {1, 2, 3, 5, 8, 10, 20, 30, 40, 50};
 
-    @Deprecated
-    public static void createWorkbook() {
-        if (_wb == null) _wb = new HSSFWorkbook();
-        _fileSaved = false;
-    }
+    public static void initExcel() {
 
-    public static void createNewSheet(String sheetName) {
+        if (_wb == null) {
+            _wb = new HSSFWorkbook();
 
-        if(_wb == null) _wb = new HSSFWorkbook();
+            _wb.createSheet("1M");
+            setHeaderOfSheet("1M");
 
-        if (_sheetHashMap == null) _sheetHashMap = new HashMap<>();
+            _wb.createSheet("10M");
+            setHeaderOfSheet("10M");
 
-        _sheetHashMap.put(sheetName, _wb.createSheet(sheetName));
+            _wb.createSheet("20M");
+            setHeaderOfSheet("20M");
 
-        _currentSheetName = sheetName;
-
-        _fileSaved = false;
-
-    }
-
-    public static void nextRow(){
-
-        Sheet shTemp = _sheetHashMap.get(_currentSheetName);
-
-        if (shTemp == null) {
-            Log.e(TAG, "Sheet is not exist. You must create a new sheet first.");
-            return;
+            _wb.createSheet("50M");
+            setHeaderOfSheet("50M");
         }
 
-        _currentRowIndex++;
+    }
 
-        shTemp.createRow(_currentRowIndex);
+    public static void clearExcel() {
+
+        _wb = null;
+
+    }
+
+    public static void setCurrentSheet(String sheetName) {
+
+        if(_wb == null) initExcel();
+
+        if( _wb.getSheet(sheetName) != null) {
+
+            if(sheetName.compareTo(_currentSheetName) == 0) return;
+
+            _currentSheetName = sheetName;
+
+        } else Log.e(TAG, "setCurrentSheet __ Illegal sheet name, must be 1M, 10M, 20M or 50M.");
 
     }
 
     public static void setCellByRowInOrder(String content) {
 
-        Sheet shTemp = _sheetHashMap.get(_currentSheetName);
-
-        if (shTemp == null) {
-            Log.e(TAG, "Sheet is not exist. You must create a new sheet first.");
-            return;
-        }
-
-        Row rowTemp = shTemp.createRow(_currentRowIndex);
-
-        Cell cellTemp = rowTemp.createCell(_currentCellIndex);
-
-        cellTemp.setCellValue(content);
-
-        _currentCellIndex++;
-
-    }
-
-    public static void setCellByRowInOrder(int content) {
-
-        Sheet shTemp = _sheetHashMap.get(_currentSheetName);
-
-        if (shTemp == null) {
-            Log.e(TAG, "Sheet is not exist. You must create a new sheet first.");
-            return;
-        }
+        Sheet shTemp = _wb.getSheet(_currentSheetName);
 
         Row rowTemp = shTemp.getRow(_currentRowIndex);
-
-        if(rowTemp == null) rowTemp = shTemp.createRow(_currentRowIndex);
 
         Cell cellTemp = rowTemp.createCell(_currentCellIndex);
 
@@ -116,16 +94,41 @@ public class excelBuilder {
 
     }
 
-    public static int getCurrentRowIndex() {
-        return _currentRowIndex;
+    public static void setCellByRowInOrder(int content) {
+
+        Sheet shTemp = _wb.getSheet(_currentSheetName);
+
+        Row rowTemp = shTemp.getRow(_currentRowIndex);
+
+        Cell cellTemp = rowTemp.createCell(_currentCellIndex);
+
+        cellTemp.setCellValue(content);
+
+//        Log.d(TAG, "put value : " + Integer.toString(content));
+
+        _currentCellIndex++;
+
     }
 
-    public static int getCurrentCellIndex() {
-        return _currentCellIndex;
+    public static void setCurrentRowByDistance(int distance) {
+
+        int rowIndex = 0;
+
+        while(rowIndex < 10) {
+            if(distances[rowIndex] == distance) break;
+            rowIndex++;
+        }
+
+        if(rowIndex == 10) Log.e(TAG, "setCurrentRowByDistance __ distance is not exist.");
+
+        _currentRowIndex = rowIndex + 1;
+
     }
 
-    public static boolean isFileSaved() {
-        return _fileSaved;
+    public static void setCurrentCell(int cellIndex){
+
+        _currentCellIndex = cellIndex;
+
     }
 
     public static boolean saveExcelFile(Context context, String fileName) {
@@ -146,7 +149,6 @@ public class excelBuilder {
             os = new FileOutputStream(file);
             _wb.write(os);
             Log.w("FileUtils", "Writing file" + file);
-            _fileSaved = true;
             success = true;
         } catch (IOException e) {
             Log.w("FileUtils", "Error writing " + file, e);
@@ -163,6 +165,7 @@ public class excelBuilder {
         return success;
     }
 
+    @Deprecated
     public static void readExcelFile(Context context, String filename) {
 
         if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
@@ -218,5 +221,17 @@ public class excelBuilder {
         return false;
     }
 
+    private static void setHeaderOfSheet(String sheetName) {
+
+        Sheet shTemp = _wb.getSheet(sheetName);
+
+        Row rowTemp = shTemp.createRow(0);
+        for(int cellIndex = 1 ; cellIndex <= 100 ; cellIndex++ )
+            rowTemp.createCell(cellIndex).setCellValue(cellIndex);
+
+        for(int rowIndex = 0 ; rowIndex < 10 ; rowIndex++ )
+            shTemp.createRow(rowIndex + 1).createCell(0).setCellValue(distances[rowIndex]);
+
+    }
 
 }

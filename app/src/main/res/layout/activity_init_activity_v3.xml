@@ -58,7 +58,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:id="@+id/forTEST"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <Space
         android:layout_width="271dp"

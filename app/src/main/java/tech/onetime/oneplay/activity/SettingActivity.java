@@ -5,12 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
-
-import java.util.Set;
 
 import tech.onetime.oneplay.R;
 import tech.onetime.oneplay.schema.BeaconObject;
@@ -25,8 +24,8 @@ public class SettingActivity extends AppCompatActivity{
 
     private static final String TAG = "SettingActivity";
 
-    private int _currentDistanceTemp = 1;
-    private String _currentTxPowerTemp = "1M";
+    private int _currentDistanceTemp;
+    private String _currentTxPowerTemp = null;
     private BeaconObject _currentBeaconTemp = null;
     private String _fileNameTemp = null;
 
@@ -144,8 +143,25 @@ public class SettingActivity extends AppCompatActivity{
         // TODO
     }
 
+    @AfterViews
+    void afterViews() {
+
+        Log.d(TAG, "afterViews");
+
+        _currentDistanceTemp = SettingState.getInstance().get_currentDistance();
+
+        _currentTxPowerTemp = SettingState.getInstance().get_currentTxPower();
+
+        _currentBeaconTemp = SettingState.getInstance().get_currentBeaconObject();
+
+        _fileNameTemp = SettingState.getInstance().get_fileName();
+
+    }
+
     @Override
     public void onBackPressed() {
+
+//        super.onBackPressed();
 
         setResult(RESULT_CANCELED, SettingActivity.this.getIntent());
         SettingActivity.this.finish();
