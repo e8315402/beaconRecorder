@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BeaconRecoder</string>
 
     <string name="no_network">請先開起網路</string>
     <string name="connection_failed">請您稍後再嘗試一次</string>

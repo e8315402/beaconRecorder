@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "tech.onetime.beaconRecoder"
+        applicationId "tech.onetime.beaconRecorder"
         minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
@@ -63,13 +63,12 @@ dependencies {
 
     compile files('libs/poi-3.7.jar')
 
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 
 apt {
     arguments {
         androidManifestFile variant.outputs[0].processResources.manifestFile
-        resourcePackageName "tech.onetime.beaconRecoder"
+        resourcePackageName "tech.onetime.beaconRecorder"
     }
 }
 tasks.withType(JavaCompile) {

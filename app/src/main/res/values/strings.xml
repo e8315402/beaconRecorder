@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeaconRecoder</string>
+    <string name="app_name" translatable="false">BeaconRecorder</string>
 
     <string name="no_network">请先开启网路</string>
     <string name="connection_failed">请您稍后再尝试一次</string>

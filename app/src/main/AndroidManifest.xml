@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.onetime.beaconRecoder">
+    package="tech.onetime.beaconRecorder">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="tech.onetime.beaconRecoder.activity.InitActivityV3_"
+        <activity android:name="tech.onetime.beaconRecorder.activity.InitActivityV3_"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,19 +29,19 @@
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
 
-        <activity android:name="tech.onetime.beaconRecoder.activity.ChooseDistanceActivity_"
+        <activity android:name="tech.onetime.beaconRecorder.activity.ChooseDistanceActivity_"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="tech.onetime.beaconRecoder.activity.ChooseTxPowerActivity_"
+        <activity android:name="tech.onetime.beaconRecorder.activity.ChooseTxPowerActivity_"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="tech.onetime.beaconRecoder.activity.SettingActivity_"
+        <activity android:name="tech.onetime.beaconRecorder.activity.SettingActivity_"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="tech.onetime.beaconRecoder.activity.ChooseBeaconActivity_"
+        <activity android:name="tech.onetime.beaconRecorder.activity.ChooseBeaconActivity_"
             android:screenOrientation="portrait">
         </activity>
 
