@@ -11,7 +11,7 @@ public class SettingState {
     private BeaconObject _currentBeaconObject = null;
     private String _fileName = null;
 
-    private int[] distances = {1, 2, 3, 5, 8, 10, 20, 30, 40, 50};
+    private int[] distances = {1, 2, 3, 5, 8, 13, 20, 30, 40, 50};
     private String[] txPowers = {"1M", "10M", "20M", "50M"};
 
     private static SettingState _instance = new SettingState();

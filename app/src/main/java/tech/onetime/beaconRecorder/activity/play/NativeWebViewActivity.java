@@ -31,14 +31,14 @@ public class NativeWebViewActivity extends AppCompatActivity  {
         final String playlist[] = {"movie1", "movie2"};
 
 
-        dialog_list.setTitle(getString(R.string.floatbtnConfirmTitle)); // play list dialog title
+        dialog_list.setTitle("test"); // play list dialog title
         dialog_list.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 /** ... Code ... */
 
-                Toast.makeText(NativeWebViewActivity.this, getString(R.string.selectIs) + playlist[selectedIndex], Toast.LENGTH_SHORT).show();
+                Toast.makeText(NativeWebViewActivity.this, "pick one" + playlist[selectedIndex], Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -67,13 +67,6 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     @ViewById(R.id.txPower)
     TextView textView_txPower;
 
-//    @ViewById(R.id.forTEST)
-//    Button forTEST;
-//
-//    @Click(R.id.forTEST)
-//    void forTest() {
-//    }
-
     @Click(R.id.startScan)
     void startScan() {
 
@@ -118,6 +111,8 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         btn_Scan.setVisibility(View.VISIBLE);
         btn_setting.setVisibility(View.VISIBLE);
+
+        while(!_scanResultQueue.isEmpty()) _scanResultQueue.poll();
 
     }
 
@@ -214,7 +209,6 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         return true;
 
     }
-
 
     @Override
     @UiThread

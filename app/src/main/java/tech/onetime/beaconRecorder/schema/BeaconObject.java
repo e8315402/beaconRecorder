@@ -90,7 +90,7 @@ public class BeaconObject implements Serializable{
     }
 
     public String getMajorMinorString(){
-        return ObjUtils.getMajorMinorString(major, minor);
+        return "(" + major + "," + minor + ")";
     }
 
 

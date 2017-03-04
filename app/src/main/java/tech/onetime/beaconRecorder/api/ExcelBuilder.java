@@ -34,7 +34,7 @@ public class ExcelBuilder {
     private static int _currentRowIndex = 1;
     private static int _currentCellIndex = 1;
 
-    private static int[] distances = {1, 2, 3, 5, 8, 10, 20, 30, 40, 50};
+    private static int[] distances = {1, 2, 3, 5, 8, 13, 20, 30, 40, 50};
 
     public static void initExcel() {
 

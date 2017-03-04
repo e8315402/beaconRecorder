@@ -1,17 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">BeaconRecorder</string>
 
-    <string name="no_network">请先开启网路</string>
-    <string name="connection_failed">请您稍后再尝试一次</string>
-    <string name="connection_error_code">错误 %s</string>
-
-    <string name="confirm_tx">确定</string>
     <string name="cancel_tx" translatable="false">Cancel</string>
 
-    <string name="close_tx">关闭</string>
-
-    <string name="floatbtnConfirmTitle">选取播放清单</string>
-    <string name="selectIs">" 您选的是"</string>
     <string name="distance_lable" translatable="false">Distance :</string>
     <string name="times_lable" translatable="false">Times :</string>
     <string name="scan" translatable="false">Scan</string>

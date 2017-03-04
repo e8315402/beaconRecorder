@@ -22,7 +22,7 @@ import tech.onetime.beaconRecorder.R;
 @EActivity(R.layout.activity_choose_distance_v2)
 public class ChooseDistanceActivity extends AppCompatActivity {
 
-    private static final Integer[] _distances = {1, 2, 3, 5, 8, 10, 20, 30, 40, 50};
+    private static final Integer[] _distances = {1, 2, 3, 5, 8, 13, 20, 30, 40, 50};
 
     @ViewById(R.id.chooseDistanceCancel)
     Button btn_chooseDistanceCancel;
