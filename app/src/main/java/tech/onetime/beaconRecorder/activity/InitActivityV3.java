@@ -29,10 +29,8 @@ import tech.onetime.beaconRecorder.ble.BeaconScanCallback;
 import tech.onetime.beaconRecorder.schema.BeaconObject;
 import tech.onetime.beaconRecorder.schema.SettingState;
 
-
 @EActivity(R.layout.activity_init_activity_v3)
 public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallback.iBeaconScanCallback {
-
 
     public final String TAG = "InitActivityV3";
 
@@ -45,79 +43,64 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
     static final int SETTING_REQUEST = 1;
     static final int REQUEST_ENABLE_BT = 1001; // The request code
 
-    @ViewById(R.id.startScan)
-    Button btn_Scan;
-    @ViewById(R.id.stopScan)
-    Button btn_stopScan;
-    @ViewById(R.id.cleanUp)
-    Button btn_cleanUp;
-    @ViewById(R.id.setting)
-    Button btn_setting;
-    @ViewById(R.id.storeResult)
-    Button btn_storeResult;
+    @ViewById Button startScan;
+    @ViewById Button stopScan;
+    @ViewById Button cleanUp;
+    @ViewById Button setting;
+    @ViewById Button storeResult;
 
-    @ViewById(R.id.rssi)
-    TextView textView_rssi;
-    @ViewById(R.id.beacon)
-    TextView textView_beacon;
-    @ViewById(R.id.times)
-    TextView textView_times;
-    @ViewById(R.id.distance)
-    TextView textView_distance;
-    @ViewById(R.id.txPower)
-    TextView textView_txPower;
+    @ViewById TextView rssi;
+    @ViewById TextView beacon;
+    @ViewById TextView times;
+    @ViewById TextView distance;
+    @ViewById TextView txPower;
 
-    @Click(R.id.startScan)
-    void startScan() {
+    @Click void startScan() {
 
         Log.d(TAG, "Start scan");
 
         if (bleInit()) {
-            btn_Scan.setVisibility(View.GONE);
-            btn_setting.setVisibility(View.GONE);
-            btn_cleanUp.setVisibility(View.GONE);
+            startScan.setVisibility(View.GONE);
+            setting.setVisibility(View.GONE);
+            cleanUp.setVisibility(View.GONE);
 
-            btn_stopScan.setVisibility(View.VISIBLE);
+            stopScan.setVisibility(View.VISIBLE);
         }
 
-}
+    }
 
-    @Click(R.id.stopScan)
-    void stopScan() {
+    @Click void stopScan() {
 
         Log.d(TAG, "Stop scan");
 
         _beaconCallback.stopScan();
 
-        btn_stopScan.setVisibility(View.GONE);
+        stopScan.setVisibility(View.GONE);
 
-        btn_Scan.setVisibility(View.VISIBLE);
-        btn_cleanUp.setVisibility(View.VISIBLE);
+        startScan.setVisibility(View.VISIBLE);
+        cleanUp.setVisibility(View.VISIBLE);
 
     }
 
-
-    @Click(R.id.cleanUp)
-    void cleanUp() {
+    @Click void cleanUp() {
 
         Log.d(TAG, "Clean up");
 
-        textView_times.setText(Integer.toString(_scanTime = 0));
-        textView_rssi.setText("00");
-        textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
+        times.setText(Integer.toString(_scanTime = 0));
+        rssi.setText("00");
+        rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
-        btn_cleanUp.setVisibility(View.GONE);
-        btn_storeResult.setVisibility(View.GONE);
+        cleanUp.setVisibility(View.GONE);
+        storeResult.setVisibility(View.GONE);
 
-        btn_Scan.setVisibility(View.VISIBLE);
-        btn_setting.setVisibility(View.VISIBLE);
+        startScan.setVisibility(View.VISIBLE);
+        setting.setVisibility(View.VISIBLE);
 
         while(!_scanResultQueue.isEmpty()) _scanResultQueue.poll();
 
     }
 
-    @Click(R.id.setting)
-    void setting() {
+    @Click void setting() {
 
         Log.d(TAG, "Setting");
 
@@ -133,9 +116,9 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         doSaveResult();
 
-        btn_storeResult.setVisibility(View.GONE);
+        storeResult.setVisibility(View.GONE);
 
-        btn_cleanUp.performClick();
+        cleanUp.performClick();
 
     }
 
@@ -199,7 +182,7 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
         if (_beaconCallback != null)
             _beaconCallback.stopScan();
 
-        textView_rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
+        rssi.setTextColor(getResources().getColor(R.color.default_textView_color));
 
         _beaconCallback = new BeaconScanCallback(this, this);
 //        Log.d(TAG, "scanBeacon __ set beacon mac : " + currentBeaconObject.mac);
@@ -218,18 +201,18 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         _scanResultQueue.offer(beaconObject_rssi);
 
-        textView_rssi.setText(Integer.toString(beaconObject_rssi));
+        rssi.setText(Integer.toString(beaconObject_rssi));
 
-        textView_times.setText(Integer.toString(++_scanTime));
+        times.setText(Integer.toString(++_scanTime));
 
         if (_scanTime == 100) {
 
-            btn_stopScan.setVisibility(View.GONE);
+            stopScan.setVisibility(View.GONE);
 
-            btn_storeResult.setVisibility(View.VISIBLE);
-            btn_cleanUp.setVisibility(View.VISIBLE);
+            storeResult.setVisibility(View.VISIBLE);
+            cleanUp.setVisibility(View.VISIBLE);
 
-            textView_rssi.setTextColor(getResources().getColor(R.color.red_500));
+            rssi.setTextColor(getResources().getColor(R.color.red_500));
 
             _beaconCallback.stopScan();
 
@@ -237,39 +220,43 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
     }
 
-    @OnActivityResult(SETTING_REQUEST)
-    void onResult_setting(int resultCode) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode == RESULT_OK) {
+        switch (requestCode) {
+            case SETTING_REQUEST:
 
-            updateView();
+                if(resultCode == RESULT_OK) {
 
+                    updateView();
+
+                }
+                if(resultCode == RESULT_CANCELED);
+
+                break;
+
+            case REQUEST_ENABLE_BT:
+
+                if(resultCode == RESULT_OK) {
+
+                    Log.d(TAG, "Enable bluetooth");
+
+                    if(scanBeacon()) {
+
+                        startScan.setVisibility(View.GONE);
+                        setting.setVisibility(View.GONE);
+                        cleanUp.setVisibility(View.GONE);
+
+                        stopScan.setVisibility(View.VISIBLE);
+
+                    }
+
+                }
+
+                if(resultCode == RESULT_CANCELED) Log.d(TAG, "Unable bluetooth");
+
+                break;
         }
-
-        if(resultCode == RESULT_CANCELED);
-
-    }
-
-    @OnActivityResult(REQUEST_ENABLE_BT)
-    void onResult_enableBT(int resultCode) {
-
-        if(resultCode == RESULT_OK) {
-
-            Log.d(TAG, "Enable bluetooth");
-
-            if(scanBeacon()) {
-
-                btn_Scan.setVisibility(View.GONE);
-                btn_setting.setVisibility(View.GONE);
-                btn_cleanUp.setVisibility(View.GONE);
-
-                btn_stopScan.setVisibility(View.VISIBLE);
-
-            }
-
-        }
-
-        if(resultCode == RESULT_CANCELED) Log.d(TAG, "Unable bluetooth");
 
     }
 
@@ -278,16 +265,16 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "updateView");
 
-        textView_rssi.setText("00");
+        rssi.setText("00");
 
-        textView_times.setText(Integer.toString(_scanTime));
+        times.setText(Integer.toString(_scanTime));
 
-        textView_distance.setText(Integer.toString(SettingState.getInstance().get_currentDistance()));
+        distance.setText(Integer.toString(SettingState.getInstance().get_currentDistance()));
 
-        textView_txPower.setText(SettingState.getInstance().get_currentTxPower());
+        txPower.setText(SettingState.getInstance().get_currentTxPower());
 
         if(SettingState.getInstance().get_currentBeaconObject() != null)
-            textView_beacon.setText(SettingState.getInstance().get_currentBeaconObject().getMajorMinorString());
+            beacon.setText(SettingState.getInstance().get_currentBeaconObject().getMajorMinorString());
 
     }
 
@@ -314,7 +301,7 @@ public class InitActivityV3 extends AppCompatActivity implements BeaconScanCallb
 
         Log.d(TAG, "onResume");
 
-        if(textView_times.getText().length() == 0) updateView();
+        if(times.getText().length() == 0) updateView();
 
     }
 
